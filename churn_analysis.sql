@@ -1,7 +1,13 @@
-CREATE DATABASE telco_project;
+
+-- Create Database
+
+CREATE DATABASE IF NOT EXISTS telco_project;
 USE telco_project;
 
-CREATE TABLE telco_churn (
+-- Create Table
+
+
+CREATE TABLE IF NOT EXISTS telco_churn (
     customerID VARCHAR(50),
     gender VARCHAR(10),
     SeniorCitizen INT,
@@ -26,14 +32,17 @@ CREATE TABLE telco_churn (
 );
 
 
-SELECT COUNT(*) FROM telco_churn;
+-- Basic Customer Overview
+-- Total Customers
 SELECT COUNT(*) AS total_customers
 FROM telco_churn;
 
+-- Churned Customers
 SELECT COUNT(*) AS churned_customers
 FROM telco_churn
 WHERE Churn = 'Yes';
 
+-- Overall Churn Rate
 SELECT 
     ROUND(
         SUM(CASE WHEN Churn = 'Yes' THEN 1 ELSE 0 END) * 100.0 
@@ -41,15 +50,21 @@ SELECT
     ) AS churn_rate_percentage
 FROM telco_churn;
 
+-- Tenure Analysis-- 
+
+-- Average Tenure (Churned Customers)
 SELECT 
     ROUND(AVG(tenure), 2) AS avg_tenure_churned
 FROM telco_churn
 WHERE Churn = 'Yes';
 
+-- Average Tenure (Overall Customers)
 SELECT 
     ROUND(AVG(tenure), 2) AS avg_tenure_overall
 FROM telco_churn;
 
+
+-- Contract Type Impact
 
 SELECT 
     Contract,
@@ -63,6 +78,7 @@ FROM telco_churn
 GROUP BY Contract
 ORDER BY churn_rate_percentage DESC;
 
+-- Payment Method Risk Analysis
 
 SELECT 
     PaymentMethod,
@@ -77,12 +93,9 @@ GROUP BY PaymentMethod
 ORDER BY churn_rate_percentage DESC;
 
 
-
-
-
+-- Revenue Impact
+-- Monthly Revenue Lost Due to Churn
 SELECT 
     ROUND(SUM(MonthlyCharges), 2) AS monthly_revenue_lost
 FROM telco_churn
 WHERE Churn = 'Yes';
-
-
